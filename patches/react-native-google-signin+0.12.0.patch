@@ -1,0 +1,150 @@
+patch-package
+--- a/node_modules/react-native-google-signin/android/build.gradle
++++ b/node_modules/react-native-google-signin/android/build.gradle
+@@ -16,9 +16,11 @@ allprojects {
+ 
+ apply plugin: 'com.android.library'
+ 
++def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION    = "12.0.1"
++
+ android {
+-    compileSdkVersion 23
+-    buildToolsVersion "23.0.3"
++    compileSdkVersion 26
++    buildToolsVersion "26.0.2"
+ 
+     defaultConfig {
+         minSdkVersion 16
+@@ -36,8 +38,10 @@ android {
+ }
+ 
+ dependencies {
++    def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion')  ? rootProject.googlePlayServicesVersion : DEFAULT_GOOGLE_PLAY_SERVICES_VERSION
++
+     compile fileTree(include: ['*.jar'], dir: 'libs')
+     compile "com.android.support:appcompat-v7:23.0.1"
+-    compile 'com.google.android.gms:play-services-auth:+'
++    compile "com.google.android.gms:play-services-auth:$googlePlayServicesVersion"
+     compile "com.facebook.react:react-native:+"
+ }
+--- a/node_modules/react-native-google-signin/android/src/main/java/co/apptailor/googlesignin/RNGoogleSigninModule.java
++++ b/node_modules/react-native-google-signin/android/src/main/java/co/apptailor/googlesignin/RNGoogleSigninModule.java
+@@ -307,7 +307,7 @@ public class RNGoogleSigninModule extends ReactContextBaseJavaModule {
+         WritableMap params = Arguments.createMap();
+         WritableArray scopes = Arguments.createArray();
+ 
+-        if (result.isSuccess()) {
++        if (result != null && result.isSuccess()) {
+             GoogleSignInAccount acct = result.getSignInAccount();
+             Uri photoUrl = acct.getPhotoUrl();
+ 
+@@ -331,12 +331,16 @@ public class RNGoogleSigninModule extends ReactContextBaseJavaModule {
+             getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                     .emit(isSilent ? "RNGoogleSignInSilentSuccess" : "RNGoogleSignInSuccess" , params);
+         } else {
+-            int code = result.getStatus().getStatusCode();
+-            String error = GoogleSignInStatusCodes.getStatusCodeString(code);
+-
+-            params.putInt("code", code);
+-            params.putString("error", error);
++            if (result != null) {
++                int code = result.getStatus().getStatusCode();
++                String error = GoogleSignInStatusCodes.getStatusCodeString(code);
+ 
++                params.putInt("code", code);
++                params.putString("error", error);
++            } else {
++                params.putInt("code", -1);
++                params.putString("error", "GoogleSignInResult is NULL");
++            }
+             getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                     .emit(isSilent ? "RNGoogleSignInSilentError" : "RNGoogleSignInError", params);
+         }
+--- a/node_modules/react-native-google-signin/ios/RNGoogleSignin.xcodeproj/project.pbxproj
++++ b/node_modules/react-native-google-signin/ios/RNGoogleSignin.xcodeproj/project.pbxproj
+@@ -221,12 +221,12 @@
+ 			buildSettings = {
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"$(PROJECT_DIR)/**",
++					"$(PROJECT_DIR)/../../../ios/Pods/GoogleSignIn/**",
+ 				);
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../../react-native/React/**",
+-					"${SRCROOT}/../../../ios/**",
++					"$(PROJECT_DIR)/../../../ios/Pods/GoogleSignIn/**",
+ 				);
+ 				OTHER_LDFLAGS = "-ObjC";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+@@ -239,12 +239,12 @@
+ 			buildSettings = {
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"$(PROJECT_DIR)/**",
++					"$(PROJECT_DIR)/../../../ios/Pods/GoogleSignIn/**",
+ 				);
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../../react-native/React/**",
+-					"${SRCROOT}/../../../ios/**",
++					"$(PROJECT_DIR)/../../../ios/Pods/GoogleSignIn/**",
+ 				);
+ 				OTHER_LDFLAGS = "-ObjC";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+--- a/node_modules/react-native-google-signin/ios/RNGoogleSignin/RNGoogleSignin.m
++++ b/node_modules/react-native-google-signin/ios/RNGoogleSignin/RNGoogleSignin.m
+@@ -1,4 +1,4 @@
+-#import "RNGoogleSignIn.h"
++#import "RNGoogleSignin.h"
+ #import "RCTEventDispatcher.h"
+ 
+ 
+@@ -129,6 +129,11 @@ RCT_EXPORT_METHOD(revokeAccess)
+                                       annotation:annotation];
+ }
+ 
+++ (BOOL)requiresMainQueueSetup
++{
++    return YES;
++}
++
+ #pragma mark - Internal Methods
+ 
+ - (UIViewController *)topMostViewController {
+--- a/node_modules/react-native-google-signin/ios/RNGoogleSignin/RNGoogleSigninButtonManager.m
++++ b/node_modules/react-native-google-signin/ios/RNGoogleSignin/RNGoogleSigninButtonManager.m
+@@ -1,6 +1,6 @@
+ 
+ #import <React/RCTViewManager.h>
+-#import "RNGoogleSignIn.h"
++#import "RNGoogleSignin.h"
+ 
+ @interface RNGoogleSigninButtonManager : RCTViewManager
+ @end
+new file mode 100644
+--- /dev/null
++++ b/node_modules/react-native-google-signin/react-native-google-signin.podspec
+@@ -0,0 +1,22 @@
++require "json"
++package = JSON.parse(File.read('package.json'))
++
++Pod::Spec.new do |s|
++  s.name          = package['name']
++  s.version       = package['version']
++  s.summary       = package['description']
++  s.author        = "devfd"
++  s.license       = package['license']
++  s.requires_arc  = true
++  s.homepage      = "https://github.com/devfd/react-native-google-signin"
++  s.source        = { :git => 'https://github.com/devfd/react-native-google-signin.git' }
++  s.platform      = :ios, '8.0'
++  s.source_files  = "ios/**/*.{h,m}"
++  s.public_header_files = ['ios/RNGoogleSignin/RNGoogleSignin.h']
++  s.static_framework = true
++
++  s.dependency "React"
++  s.dependency "GoogleSignIn"
++
++end
++
