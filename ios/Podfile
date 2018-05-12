@@ -27,6 +27,8 @@ target 'amplifyExample' do
 
   pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk/ios'
 
+  pod 'react-native-google-signin', :path => '../node_modules/react-native-google-signin'
+
   target 'amplifyExampleTests' do
     inherit! :search_paths
     # Pods for testing
