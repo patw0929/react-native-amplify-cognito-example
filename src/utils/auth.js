@@ -2,6 +2,8 @@ import Amplify, { Auth } from 'aws-amplify';
 import {
   AccessToken as FBAccessToken,
   LoginManager as FBLoginManager,
+  GraphRequest,
+  GraphRequestManager,
 } from 'react-native-fbsdk';
 import aws_exports from '../aws-exports';
 
@@ -27,9 +29,35 @@ export const logout = () => {
   cleanLoginStatus();
 };
 
+const getFBGraphRequest = () => {
+  return new Promise((resolve, reject) => {
+    const infoRequest = new GraphRequest(
+      '/me',
+      {
+        parameters: {
+          fields: {
+            string: 'email,name,first_name,last_name',
+          },
+        },
+      },
+      (error, result) => {
+        if (error) {
+          console.log(error.toString());
+          reject(error);
+        } else {
+          console.log(result);
+          resolve(result);
+        }
+      }
+    );
+
+    new GraphRequestManager().addRequest(infoRequest).start();
+  });
+};
+
 export const loginFB = () => {
   return new Promise(async (resolve, reject) => {
-    const loginResult = await FBLoginManager.logInWithReadPermissions(['email', 'user_birthday']);
+    const loginResult = await FBLoginManager.logInWithReadPermissions(['email']);
 
     if (loginResult.isCancelled) {
       reject('Login canceled');
@@ -39,8 +67,9 @@ export const loginFB = () => {
 
     const tokenData = await FBAccessToken.getCurrentAccessToken();
     const { accessToken, expirationTime } = tokenData;
+    const userData = await getFBGraphRequest();
     const credentials =
-      await Auth.federatedSignIn('facebook', { token: accessToken, expires_at: expirationTime });
+      await Auth.federatedSignIn('facebook', { token: accessToken, expires_at: expirationTime }, userData);
 
     if (credentials.authenticated) {
       const result = await getOpenIdToken('graph.facebook.com', credentials._identityId, accessToken);
@@ -51,6 +80,7 @@ export const loginFB = () => {
     }
 
     reject('Authentication failed');
+    console.log('failed');
 
     return;
   });
