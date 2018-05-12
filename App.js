@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import { Auth } from 'aws-amplify';
 import {
   AccessToken as FBAccessToken,
   LoginManager as FBLoginManager,
@@ -93,6 +94,12 @@ export default class App extends Component<Props, State> {
     isLoading: false,
     loggedIn: false,
   };
+
+  async componentDidMount() {
+    const session = await Auth.currentUserCredentials();
+
+    console.log(session);
+  }
 
   handleLogin = async (type) => {
     let result;
