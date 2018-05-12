@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "aws-amplify": "^0.3.3",
+    "aws-amplify-react-native": "^0.2.9",
     "react": "16.3.1",
     "react-native": "0.55.4"
   },
