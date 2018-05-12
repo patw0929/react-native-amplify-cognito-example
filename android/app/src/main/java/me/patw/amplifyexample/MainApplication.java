@@ -1,4 +1,4 @@
-package com.amplifyexample;
+package me.patw.amplifyexample;
 
 import android.app.Application;
 

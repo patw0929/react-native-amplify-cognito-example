@@ -1,4 +1,4 @@
-package com.amplifyexample;
+package me.patw.amplifyexample;
 
 import com.facebook.react.ReactActivity;
 
