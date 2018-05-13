@@ -11,6 +11,7 @@
 #import <React/RCTRootView.h>
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <RNGoogleSignin.h>
 
 @implementation AppDelegate
 
@@ -36,6 +37,12 @@
     didFinishLaunchingWithOptions:launchOptions];
   // Add any custom logic here.
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+
+  return [RNGoogleSignin application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 
 @end

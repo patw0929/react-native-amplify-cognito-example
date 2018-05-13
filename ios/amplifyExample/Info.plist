@@ -28,6 +28,26 @@
 				<string>fb1634090856704555</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.googleusercontent.apps.567874766145-ijht4o6ll24qjgtth2l4k5ek37ahftv6</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.567874766145-ijht4o6ll24qjgtth2l4k5ek37ahftv6</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>me.patw.amplifyExample</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>me.patw.amplifyExample</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
