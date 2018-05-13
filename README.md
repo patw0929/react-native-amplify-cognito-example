@@ -12,7 +12,9 @@ Anyway, I am looking forward to the way that we can login with cognito user-pool
 ## Instruction
 
 1. Please refer the AWS Amplify official documentation to set your AWS Mobile Hub & Cognito.
-2. Make sure that you have `aws-exports.js` in `src/`.
+2. Set your Facebook App & Google App (OAuth 2.0 Client ID).
+3. Replaced `android/app/google-services.json` with you Firebase app. (If you want to login with google)
+4. Make sure that you have set the `aws-exports.js` in `src/`, like:
 
    ```js
    const awsmobile = {
@@ -33,7 +35,7 @@ Anyway, I am looking forward to the way that we can login with cognito user-pool
    export default awsmobile;
    ```
 
-3. Run `react-native run-android` or `react-native run-ios`
+5. Run `react-native run-android` or `react-native run-ios`
 
 ## Packages
 
@@ -42,6 +44,7 @@ Anyway, I am looking forward to the way that we can login with cognito user-pool
 * [react-native-google-signin](https://github.com/devfd/react-native-google-signin) 0.12.0 (with patches)
 * [aws-amplify](https://github.com/aws/aws-amplify) 0.3.3
 * [patch-package](https://github.com/ds300/patch-package) 5.1.1 (for patching react-native-google-signin)
+* Cocoapods 1.4.0
 
 ## License
 
