@@ -18,6 +18,26 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.4)
+  - GoogleSignIn (4.1.2):
+    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
+    - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
+    - GTMOAuth2 (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleToolboxForMac/DebugUtils (2.1.4):
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+  - GoogleToolboxForMac/Defines (2.1.4)
+  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.4):
+    - GoogleToolboxForMac/DebugUtils (= 2.1.4)
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.4)
+  - GoogleToolboxForMac/NSString+URLArguments (2.1.4)
+  - GTMOAuth2 (1.1.6):
+    - GTMSessionFetcher (~> 1.1)
+  - GTMSessionFetcher (1.1.15):
+    - GTMSessionFetcher/Full (= 1.1.15)
+  - GTMSessionFetcher/Core (1.1.15)
+  - GTMSessionFetcher/Full (1.1.15):
+    - GTMSessionFetcher/Core (= 1.1.15)
   - React (0.55.4):
     - React/Core (= 0.55.4)
   - react-native-fbsdk (0.7.0):
@@ -33,6 +53,9 @@ PODS:
     - React
   - react-native-fbsdk/Share (0.7.0):
     - FBSDKShareKit
+    - React
+  - react-native-google-signin (0.12.0):
+    - GoogleSignIn
     - React
   - React/Core (0.55.4):
     - yoga (= 0.55.4.React)
@@ -73,6 +96,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk/ios`)
+  - react-native-google-signin (from `../node_modules/react-native-google-signin`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -84,17 +108,19 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   DoubleConversion:
-    :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+    :podspec: ../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec
   Folly:
-    :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
+    :podspec: ../node_modules/react-native/third-party-podspecs/Folly.podspec
   glog:
-    :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+    :podspec: ../node_modules/react-native/third-party-podspecs/glog.podspec
   React:
-    :path: "../node_modules/react-native"
+    :path: ../node_modules/react-native
   react-native-fbsdk:
-    :path: "../node_modules/react-native-fbsdk/ios"
+    :path: ../node_modules/react-native-fbsdk/ios
+  react-native-google-signin:
+    :path: ../node_modules/react-native-google-signin
   yoga:
-    :path: "../node_modules/react-native/ReactCommon/yoga"
+    :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
@@ -105,10 +131,15 @@ SPEC CHECKSUMS:
   FBSDKShareKit: b7b5002833a4104fbecad75e8e4e082e91c7a08a
   Folly: 211775e49d8da0ca658aebc8eab89d642935755c
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  React: 755b16d9a9387e856d4dce6528130c51e4d409b8
-  react-native-fbsdk: 5ba257c1edd0a53dec698253c702d5394355d948
-  yoga: c3ce6137f85f60c93a834235d7f08e2b44a42eed
+  GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
+  GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
+  GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
+  GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
+  React: aa2040dbb6f317b95314968021bd2888816e03d5
+  react-native-fbsdk: 8a738a123494ae9ba69482a5a8e88aa2108b8245
+  react-native-google-signin: 6557feb8573d964378c9953209c09705fa8ca661
+  yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
-PODFILE CHECKSUM: 9f395902238fad7312352b5964d1c44e5ea718cc
+PODFILE CHECKSUM: 00dd3fd9a541746e28c1149cdecb632ad151d729
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.4.0
