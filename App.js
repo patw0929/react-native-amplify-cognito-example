@@ -95,10 +95,12 @@ export default class App extends Component<Props, State> {
     loggedIn: false,
   };
 
-  async componentDidMount() {
-    const session = await Auth.currentUserCredentials();
+  componentWillMount() {
+    AuthUtils.init();
 
-    console.log(session);
+    // const session = await Auth.currentUserCredentials();
+
+    // console.log(session);
   }
 
   handleLogin = async (type) => {
@@ -112,6 +114,9 @@ export default class App extends Component<Props, State> {
     try {
       if (type === 'facebook') {
         result = await AuthUtils.loginFB();
+      }
+      else if (type === 'google') {
+        result = await AuthUtils.loginGoogle();
       }
     } catch (err) {
       console.log(err);
@@ -166,6 +171,10 @@ export default class App extends Component<Props, State> {
         {!loggedIn && <View>
           <TouchableOpacity onPress={() => this.handleLogin('facebook')} style={styles.facebookLoginButton}>
             <Text style={styles.facebookLoginButtonText}>Login with Facebook</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.handleLogin('google')} style={styles.googleLoginButton}>
+            <Text style={styles.googleLoginButtonText}>Login with Google</Text>
           </TouchableOpacity>
         </View>}
       </View>
