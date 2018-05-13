@@ -1350,6 +1350,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.patw.amplifyExample;
 				PRODUCT_NAME = amplifyExample;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1368,6 +1369,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.patw.amplifyExample;
 				PRODUCT_NAME = amplifyExample;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
