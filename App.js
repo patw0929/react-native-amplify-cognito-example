@@ -1,58 +1,183 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
+// @flow
 import React, { Component } from 'react';
 import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
+import { Auth } from 'aws-amplify';
+import {
+  AccessToken as FBAccessToken,
+  LoginManager as FBLoginManager,
+} from 'react-native-fbsdk';
+import * as AuthUtils from './src/utils/auth';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+const styles = StyleSheet.create({
+  containerStyle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  headingText: {
+    fontWeight: '500',
+    fontSize: 18,
+    color: 'rgb(38, 38, 38)',
+    marginTop: 20,
+    marginBottom: 12,
+  },
+  welcomeText: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  facebookLoginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 260,
+    backgroundColor: 'rgb(59, 90, 150)',
+    borderRadius: 4,
+    paddingVertical: 15,
+    paddingHorizontal: 32,
+  },
+  facebookLoginButtonText: {
+    fontWeight: 'normal',
+    fontSize: 17,
+    color: 'rgb(255, 255, 255)',
+  },
+  googleLoginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 260,
+    backgroundColor: 'rgb(234, 67, 53)',
+    borderRadius: 4,
+    marginTop: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 32,
+  },
+  googleLoginButtonText: {
+    fontWeight: 'normal',
+    fontSize: 17,
+    color: 'rgb(255, 255, 255)',
+    marginLeft: 10,
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 260,
+    backgroundColor: 'rgb(234, 67, 53)',
+    borderRadius: 4,
+    marginTop: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 32,
+  },
+  logoutButtonText: {
+    fontWeight: 'normal',
+    fontSize: 17,
+    color: 'rgb(255, 255, 255)',
+    marginLeft: 10,
+  },
 });
 
 type Props = {};
-export default class App extends Component<Props> {
+type State = {
+  isLoading: boolean,
+  loggedIn: boolean,
+};
+export default class App extends Component<Props, State> {
+  state = {
+    isLoading: false,
+    loggedIn: false,
+  };
+
+  componentWillMount() {
+    AuthUtils.init();
+
+    // const session = await Auth.currentUserCredentials();
+
+    // console.log(session);
+  }
+
+  handleLogin = async (type) => {
+    let result;
+
+    this.setState(prevState => ({
+      ...prevState,
+      isLoading: true,
+    }));
+
+    try {
+      if (type === 'facebook') {
+        result = await AuthUtils.loginFB();
+      }
+      else if (type === 'google') {
+        result = await AuthUtils.loginGoogle();
+      }
+    } catch (err) {
+      console.log(err);
+
+      this.setState(prevState => ({
+        ...prevState,
+        isLoading: false,
+      }));
+    }
+
+    if (result) {
+      Alert.alert(`Your OpenID token: ${result}`);
+
+      this.setState(prevState => ({
+        ...prevState,
+        loggedIn: true,
+        isLoading: false,
+      }));
+    } else {
+      this.setState(prevState => ({
+        ...prevState,
+        isLoading: false,
+      }));
+    }
+  }
+
+  handleLogout = () => {
+    AuthUtils.logout();
+
+    this.setState({
+      loggedIn: false,
+      isLoading: false,
+    });
+  }
+
   render() {
+    const { isLoading, loggedIn, profile } = this.state;
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+      <View style={styles.containerStyle}>
+        <Text style={styles.headingText}>React-Native Cognito Login Example</Text>
+
+        {loggedIn && <View style={styles.welcome}>
+          <Text style={styles.welcomeText}>
+            You're logged in!
+          </Text>
+          <TouchableOpacity onPress={() => this.handleLogout()} style={styles.logoutButton}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>}
+
+        {!loggedIn && <View>
+          <TouchableOpacity onPress={() => this.handleLogin('facebook')} style={styles.facebookLoginButton}>
+            <Text style={styles.facebookLoginButtonText}>Login with Facebook</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.handleLogin('google')} style={styles.googleLoginButton}>
+            <Text style={styles.googleLoginButtonText}>Login with Google</Text>
+          </TouchableOpacity>
+        </View>}
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});

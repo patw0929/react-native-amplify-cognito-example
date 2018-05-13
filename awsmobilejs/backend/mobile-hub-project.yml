@@ -1,0 +1,19 @@
+--- !com.amazonaws.mobilehub.v0.Project 
+features:
+  sign-in: !com.amazonaws.mobilehub.v0.SignIn 
+    attributes:
+      enabled: true
+      optional-sign-in: true
+    components:
+      sign-in-facebook: !com.amazonaws.mobilehub.v0.StandardIdentityProvider 
+        attributes:
+          provider-id: '1634090856704555'
+          provider-name: facebook
+      sign-in-google: !com.amazonaws.mobilehub.v0.OpenIDConnectIdentityProvider 
+        attributes:
+          open-id-connect-audience-android: 567874766145-aavgo3uvk2j140fc91id3c7012ga5ctt.apps.googleusercontent.com
+          open-id-connect-audience-ios: 567874766145-ijht4o6ll24qjgtth2l4k5ek37ahftv6.apps.googleusercontent.com
+          open-id-connect-audience-webapp: 567874766145-u37t5dl48vole6ba27714u2nb6j3hfqm.apps.googleusercontent.com
+          open-id-provider-url: 'https://accounts.google.com'
+name: react-native-amplify-cognito-example-2018-05-12-10-45-50
+region: us-west-1

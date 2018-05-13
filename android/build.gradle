@@ -6,10 +6,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.google.gms:google-services:3.2.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+ext {
+    googlePlayServicesVersion = '11.0.2'
 }
 
 allprojects {
@@ -17,8 +22,18 @@ allprojects {
         mavenLocal()
         jcenter()
         maven {
+            url 'https://maven.google.com'
+        }
+        maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
+        }
+
+        configurations.all {
+            resolutionStrategy {
+                force "com.android.support:appcompat-v7:26.0.1"
+                force "com.facebook.android:facebook-android-sdk:4.+"
+            }
         }
     }
 }
